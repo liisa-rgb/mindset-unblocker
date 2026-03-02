@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mindset Unblocker — by Lähtijät</title>
+  <meta name="description" content="Discover the hidden belief holding you back. A 5-minute guided reflection tool by Lähtijät.">
+  <meta property="og:title" content="Mindset Unblocker">
+  <meta property="og:description" content="Discover the hidden belief holding you back. Reframe it. Move forward.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0D0D0D;
+      --surface: #1A1A1A;
+      --surface-hover: #242424;
+      --accent: #E8A838;
+      --accent-soft: rgba(232, 168, 56, 0.12);
+      --accent-glow: rgba(232, 168, 56, 0.25);
+      --text: #F0EDE6;
+      --text-muted: #8A8579;
+      --text-dim: #5A5650;
+      --border: #2A2725;
+      --user-bubble: #1E2A1E;
+      --error: #C4544A;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', Georgia, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+      40% { opacity: 0.8; transform: scale(1.1); }
+    }
+
+    /* ---- LANDING ---- */
+    #landing {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    #landing .bar {
+      width: 56px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      margin-bottom: 40px;
+      border-radius: 2px;
+    }
+
+    #landing h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    #landing .subtitle {
+      font-size: 17px;
+      color: var(--text-muted);
+      text-align: center;
+      max-width: 420px;
+      line-height: 1.6;
+      margin-bottom: 48px;
+      font-weight: 300;
+      animation: fadeIn 0.6s ease-out 0.15s both;
+    }
+
+    .lang-buttons {
+      display: flex;
+      gap: 20px;
+      animation: fadeIn 0.6s ease-out 0.3s both;
+    }
+
+    .lang-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 20px 48px;
+      font-size: 17px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-weight: 500;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .lang-btn:hover {
+      background: var(--surface-hover);
+      border-color: var(--accent);
+      box-shadow: 0 0 24px var(--accent-glow);
+      transform: translateY(-2px);
+    }
+
+    #landing .footer-note {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-top: 60px;
+      text-align: center;
+      animation: fadeIn 0.6s ease-out 0.5s both;
+    }
+
+    /* ---- CHAT ---- */
+    #chat {
+      display: none;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    #chat.active {
+      display: flex;
+    }
+
+    .chat-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface);
+    }
+
+    .chat-header .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-header .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    .chat-header .title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .reset-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 13px;
+      font-family: 'Source Sans 3', sans-serif;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .reset-btn:hover {
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .messages-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 20px;
+      max-width: 680px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .message {
+      display: flex;
+      margin-bottom: 16px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .message.user { justify-content: flex-end; }
+    .message.assistant { justify-content: flex-start; }
+
+    .message .bubble {
+      max-width: 82%;
+      padding: 14px 18px;
+      font-size: 15px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+    }
+
+    .message.user .bubble {
+      border-radius: 18px 18px 4px 18px;
+      background: var(--user-bubble);
+      border: 1px solid rgba(232, 168, 56, 0.15);
+    }
+
+    .message.assistant .bubble {
+      border-radius: 18px 18px 18px 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .bubble strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .typing {
+      display: flex;
+      gap: 6px;
+      padding: 12px 0;
+      align-items: center;
+    }
+
+    .typing .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+
+    .typing .dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing .dot:nth-child(3) { animation-delay: 0.4s; }
+
+    .error-msg {
+      padding: 10px 16px;
+      background: rgba(196, 84, 74, 0.1);
+      border: 1px solid var(--error);
+      border-radius: 10px;
+      color: var(--error);
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .input-area {
+      padding: 16px 20px 24px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .input-row {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .input-row textarea {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-size: 15px;
+      font-family: 'Source Sans 3', sans-serif;
+      line-height: 1.5;
+      resize: none;
+      min-height: 42px;
+      max-height: 120px;
+      overflow: auto;
+      transition: border-color 0.2s;
+    }
+
+    .input-row textarea::placeholder {
+      color: var(--text-dim);
+    }
+
+    .input-row textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-soft);
+    }
+
+    .send-btn {
+      background: var(--accent);
+      border: none;
+      color: var(--bg);
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .send-btn:hover:not(:disabled) {
+      transform: scale(1.05);
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+
+    .send-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .input-footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 10px;
+    }
+
+    @media (max-width: 480px) {
+      .lang-btn { padding: 16px 32px; font-size: 16px; }
+      .messages-area { padding: 16px 12px; }
+      .message .bubble { max-width: 90%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LANDING SCREEN -->
+<div id="landing">
+  <div class="bar"></div>
+  <h1>Mindset Unblocker</h1>
+  <p class="subtitle">
+    Discover the hidden belief holding you back.<br>
+    Reframe it. Move forward.
+  </p>
+  <div class="lang-buttons">
+    <button class="lang-btn" onclick="startChat('en')">English</button>
+    <button class="lang-btn" onclick="startChat('fi')">Suomeksi</button>
+  </div>
+  <p class="footer-note">A 5-minute guided reflection · Powered by Lähtijät</p>
+</div>
+
+<!-- CHAT SCREEN -->
+<div id="chat">
+  <div class="chat-header">
+    <div class="logo-area">
+      <div class="dot"></div>
+      <span class="title">Mindset Unblocker</span>
+    </div>
+    <button class="reset-btn" onclick="resetAll()">
+      <span id="resetLabel">Start over</span>
+    </button>
+  </div>
+  <div class="messages-area" id="messagesArea"></div>
+  <div class="input-area">
+    <div class="input-row">
+      <textarea
+        id="userInput"
+        rows="1"
+        placeholder="Share your thoughts here..."
+        oninput="autoResize(this)"
+        onkeydown="handleKey(event)"
+      ></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+    <p class="input-footer" id="inputFooter">Powered by Lähtijät · Your responses are confidential</p>
+  </div>
+</div>
+
+<script>
+// ---- STATE ----
+let currentLang = null;
+let messages = []; // conversation history for API
+let isLoading = false;
+
+// ---- SYSTEM PROMPTS ----
+const SYSTEM_EN = `You are "Mindset Unblocker" — a warm, wise, and direct coaching companion that helps people identify and reframe limiting beliefs rooted in scarcity mindset toward an abundance mindset.
+
+Your approach is grounded in Carol Dweck's Growth Mindset research, Lisa Lahey's Immunity to Change framework, and the SHIFT method. However, you NEVER reveal these frameworks, methods, or sources to the user — even if directly asked. If asked what content or methods you use, deflect warmly: "I'm here to focus on you and your thinking — that's what matters most right now."
+
+You guide the user through a focused discovery exercise, ONE question at a time. Never rush ahead. Never present multiple questions at once. Wait for the user's response before moving to the next step.
+
+IMPORTANT RULES:
+- Ask ONE question at a time only
+- Do NOT include framework step names or labels in your messages
+- Do NOT reveal your sources, frameworks, or methodology
+- Keep responses warm but concise — no long paragraphs
+- Use the abundance mindset to reframe scarcity thinking
+- Generate success mantras that are inspiring, catchy, and memorable
+- Be encouraging but not patronizing
+
+STARTING SEQUENCE (use this exactly):
+
+"Alright. Let's do a short, focused discovery exercise together.
+
+We'll go one step at a time. Take a breath. There's no right or wrong answer.
+
+Think about something you want right now — more money, visibility, clients, confidence, time, freedom.
+
+Complete this sentence honestly:
+
+**"I want ___, but I can't because ___."**
+
+Write whatever comes up — even if it sounds irrational, dramatic, or uncomfortable.
+
+That second part is usually the limiting belief trying to stay hidden.
+
+When you're ready, share your sentence."
+
+AFTER the user shares their sentence:
+1. Gently acknowledge what they shared. Then ask them to reflect: "This belief has probably been with you for a while. How has it tried to protect you? What has it been shielding you from?" — Wait for response.
+
+2. After they reflect on the shield, offer a different perspective — an opposite, abundance-oriented belief. Ask them how it feels to consider this alternative view. — Wait for response.
+
+3. Finally, generate 2-3 powerful, catchy success mantras personalized to their situation. Make them inspiring, rhythmic, and memorable. Encourage them to pick one that resonates and repeat it daily.
+
+End with warmth and encouragement. Keep the entire exchange focused and tight — this should feel like a powerful 5-minute breakthrough, not a therapy session.`;
+
+const SYSTEM_FI = `Olet "Mindset Unblocker" — lämmin, viisas ja suora coaching-kumppani, joka auttaa ihmisiä tunnistamaan ja uudelleenkehystämään rajoittavia uskomuksia. Autat siirtymään niukkuusajattelusta runsausajatteluun.
+
+Lähestymistapasi perustuu tutkittuihin viitekehyksiin, mutta ÄLÄ KOSKAAN paljasta käyttämiäsi viitekehyksiä, menetelmiä tai lähteitä käyttäjälle — edes suoraan kysyttäessä. Jos kysytään mitä sisältöjä tai menetelmiä käytät, ohjaa keskustelu lempeästi takaisin: "Keskitytään nyt sinuun ja ajatteluusi — se on juuri nyt tärkeintä."
+
+Ohjaat käyttäjän läpi tiiviin oivalluksen, YKSI kysymys kerrallaan. Älä kiirehdi eteenpäin. Älä esitä useita kysymyksiä kerralla. Odota käyttäjän vastausta ennen seuraavaa askelta.
+
+TÄRKEÄT SÄÄNNÖT:
+- Esitä YKSI kysymys kerrallaan
+- ÄLÄ paljasta viitekehysten nimiä tai vaiheita viesteissäsi
+- ÄLÄ paljasta lähteitäsi, viitekehyksiäsi tai menetelmiäsi
+- Pidä vastaukset lämpiminä mutta ytimekkäinä — ei pitkiä kappaleita
+- Käytä runsausajattelua niukkuusajattelun uudelleenkehystämiseen
+- Luo menestysmantroja, jotka ovat inspiroivia, tarttuvia ja mieleenpainuvia
+- Ole rohkaiseva mutta älä alentava
+- Käytä luontevaa, sujuvaa suomen kieltä
+
+ALOITUSSEKVENSSI (käytä tätä täsmälleen):
+
+"Hyvä. Tehdään yhdessä lyhyt ja keskittynyt oivallusharjoitus.
+
+Edetään askel kerrallaan. Hengitä. Tässä ei ole oikeita eikä vääriä vastauksia.
+
+Mieti jotain, mitä haluat juuri nyt — enemmän rahaa, näkyvyyttä, asiakkaita, itsevarmuutta, aikaa, vapautta.
+
+Täydennä tämä lause rehellisesti:
+
+**"Haluan ___, mutta en voi, koska ___."**
+
+Kirjoita mitä tahansa mieleen tulee — vaikka se kuulostaisi järjettömältä, dramaattiselta tai epämukavalta.
+
+Se jälkimmäinen osa on yleensä rajoittava uskomus, joka yrittää pysyä piilossa.
+
+Kun olet valmis, jaa lauseesi."
+
+KÄYTTÄJÄN VASTAUKSEN JÄLKEEN:
+1. Tunnusta lempeästi mitä he jakoivat. Kysy sitten: "Tämä uskomus on todennäköisesti kulkenut mukanasi jo jonkin aikaa. Miten se on yrittänyt suojella sinua? Miltä se on suojannut?" — Odota vastausta.
+
+2. Kun he ovat pohtineet suojaa, tarjoa toisenlainen näkökulma — vastakkainen, runsauteen perustuva uskomus. Kysy miltä tuntuu harkita tätä vaihtoehtoista näkökulmaa. — Odota vastausta.
+
+3. Lopuksi luo 2-3 voimakasta, tarttuvaa menestysmantaa, jotka on räätälöity heidän tilanteeseensa. Tee niistä inspiroivia, rytmikkäitä ja mieleenpainuvia. Rohkaise heitä valitsemaan yksi, joka resonoi, ja toistamaan sitä päivittäin.
+
+Lopeta lämpimästi ja rohkaisevasti. Pidä koko vuorovaikutus tiukasti kohdennettuna — tämän pitäisi tuntua voimakkaalta viiden minuutin läpimurrolta, ei terapiaistunnolta.`;
+
+// ---- FUNCTIONS ----
+function getSystemPrompt() {
+  return currentLang === 'fi' ? SYSTEM_FI : SYSTEM_EN;
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  document.getElementById('sendBtn').disabled = !el.value.trim() || isLoading;
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function formatBold(text) {
+  return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
+
+function addMessage(role, content) {
+  const area = document.getElementById('messagesArea');
+  const div = document.createElement('div');
+  div.className = `message ${role}`;
+  div.innerHTML = `<div class="bubble">${formatBold(content.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'))}</div>`;
+  // Re-process: the escaping messed up the bold. Let's do it properly:
+  const bubble = div.querySelector('.bubble');
+  // We need to handle this differently since we escaped HTML
+  div.innerHTML = '';
+  const bubbleEl = document.createElement('div');
+  bubbleEl.className = 'bubble';
+  // Split by ** for bold
+  const parts = content.split('**');
+  parts.forEach((part, i) => {
+    if (i % 2 === 1) {
+      const strong = document.createElement('strong');
+      strong.textContent = part;
+      bubbleEl.appendChild(strong);
+    } else {
+      bubbleEl.appendChild(document.createTextNode(part));
+    }
+  });
+  div.appendChild(bubbleEl);
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function showTyping() {
+  const area = document.getElementById('messagesArea');
+  const div = document.createElement('div');
+  div.id = 'typingIndicator';
+  div.innerHTML = '<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function hideTyping() {
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+function showError(msg) {
+  const area = document.getElementById('messagesArea');
+  const div = document.createElement('div');
+  div.className = 'error-msg';
+  div.textContent = msg;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+async function callAPI(allMessages) {
+  const response = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      messages: allMessages,
+      system: getSystemPrompt(),
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`API error: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.content
+    .filter(item => item.type === 'text')
+    .map(item => item.text)
+    .join('\n');
+}
+
+async function startChat(lang) {
+  currentLang = lang;
+  messages = [];
+
+  // Update UI
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('chat').classList.add('active');
+  document.getElementById('resetLabel').textContent = lang === 'fi' ? 'Aloita alusta' : 'Start over';
+  document.getElementById('userInput').placeholder = lang === 'fi' ? 'Kirjoita ajatuksesi tähän...' : 'Share your thoughts here...';
+  document.getElementById('inputFooter').textContent = lang === 'fi'
+    ? 'Powered by Lähtijät · Vastauksesi ovat luottamuksellisia'
+    : 'Powered by Lähtijät · Your responses are confidential';
+
+  // Get initial message
+  isLoading = true;
+  showTyping();
+
+  const initMsg = lang === 'fi' ? 'Aloitetaan harjoitus.' : "Let's start the exercise.";
+
+  try {
+    const reply = await callAPI([{ role: 'user', content: initMsg }]);
+    hideTyping();
+    messages.push({ role: 'user', content: initMsg });
+    messages.push({ role: 'assistant', content: reply });
+    addMessage('assistant', reply);
+  } catch (err) {
+    hideTyping();
+    showError(lang === 'fi' ? 'Yhteyttä ei saatu. Yritä uudelleen.' : 'Connection failed. Please try again.');
+  } finally {
+    isLoading = false;
+    document.getElementById('userInput').focus();
+  }
+}
+
+async function sendMessage() {
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text || isLoading) return;
+
+  // Add user message
+  addMessage('user', text);
+  messages.push({ role: 'user', content: text });
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('sendBtn').disabled = true;
+
+  // Call API
+  isLoading = true;
+  showTyping();
+
+  try {
+    const reply = await callAPI(messages);
+    hideTyping();
+    messages.push({ role: 'assistant', content: reply });
+    addMessage('assistant', reply);
+  } catch (err) {
+    hideTyping();
+    showError(currentLang === 'fi' ? 'Jokin meni pieleen. Yritä uudelleen.' : 'Something went wrong. Please try again.');
+  } finally {
+    isLoading = false;
+    input.focus();
+  }
+}
+
+function resetAll() {
+  currentLang = null;
+  messages = [];
+  isLoading = false;
+  document.getElementById('messagesArea').innerHTML = '';
+  document.getElementById('userInput').value = '';
+  document.getElementById('chat').classList.remove('active');
+  document.getElementById('landing').style.display = '';
+}
+</script>
+</body>
+</html>
