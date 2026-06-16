@@ -4,131 +4,186 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mindset Unblocker — by Lähtijät</title>
-  <meta name="description" content="Discover the hidden belief holding you back. A 5-minute guided reflection tool by Lähtijät.">
+  <meta name="description" content="Discover the hidden belief holding you back. A 5-minute guided reflection by Lähtijät.">
   <meta property="og:title" content="Mindset Unblocker">
   <meta property="og:description" content="Discover the hidden belief holding you back. Reframe it. Move forward.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
   <style>
+    /* ============================================================
+       Nordic Edge brand tokens (translated from the design system's
+       Tailwind v4 @theme into plain CSS for this static app).
+       ============================================================ */
+    @font-face {
+      font-family: "Sohne Breit";
+      src: url("/fonts/SohneBreit-Buch.woff2") format("woff2");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "Anton";
+      src: url("/fonts/Anton-Regular.ttf") format("truetype");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+
     :root {
-      --bg: #0D0D0D;
-      --surface: #1A1A1A;
-      --surface-hover: #242424;
-      --accent: #E8A838;
-      --accent-soft: rgba(232, 168, 56, 0.12);
-      --accent-glow: rgba(232, 168, 56, 0.25);
-      --text: #F0EDE6;
-      --text-muted: #8A8579;
-      --text-dim: #5A5650;
-      --border: #2A2725;
-      --user-bubble: #1E2A1E;
-      --error: #C4544A;
+      /* Palette — exactly six. Text + marks are always dark-blue or white. */
+      --dark-blue: #230064;
+      --ice-blue: #c8e1ff;
+      --hot-pink: #ff3787;
+      --orange-peach: #ff823c;
+      --powder-pink: #ffc8c8;
+      --white: #ffffff;
+
+      /* Text tiers on light backgrounds */
+      --fg: #230064;
+      --fg-muted: rgb(35 0 100 / 0.65);
+      --fg-subtle: rgb(35 0 100 / 0.50);
+      --border: rgb(35 0 100 / 0.10);
+
+      /* Type — three families, one role each */
+      --font-headline: "Sohne Breit", "Anton", sans-serif;
+      --font-subheading: "Anton", sans-serif;
+      --font-body: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+      --tracking-eyebrow: 0.18em;
+      --radius-card: 1.5rem; /* 24px */
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Source Sans 3', Georgia, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--fg);
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
 
+    /* one-shot, restrained */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    @keyframes pulse {
-      0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
-      40% { opacity: 0.8; transform: scale(1.1); }
+    /* functional typing loader — opacity only (no scale/bounce per brand) */
+    @keyframes pulseOpacity {
+      0%, 80%, 100% { opacity: 0.25; }
+      40% { opacity: 1; }
     }
 
-    /* ---- LANDING ---- */
+    /* N-cut triangle — the signature brand graphic (currentColor) */
+    .ncut { display: inline-block; fill: currentColor; }
+
+    /* Eyebrow label */
+    .eyebrow {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-eyebrow);
+    }
+
+    /* ---- LANDING (sharp, full-bleed dark-blue hero) ---- */
     #landing {
       min-height: 100vh;
+      background: var(--dark-blue);
+      color: var(--white);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 24px;
+      text-align: center;
     }
 
-    #landing .bar {
-      width: 56px;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      margin-bottom: 40px;
-      border-radius: 2px;
+    #landing .mark {
+      color: var(--hot-pink);
+      margin-bottom: 32px;
+      animation: fadeIn 0.6s ease-out;
+    }
+    #landing .mark .ncut { width: 30px; height: auto; }
+
+    #landing .eyebrow {
+      color: var(--hot-pink);
+      margin-bottom: 18px;
+      animation: fadeIn 0.6s ease-out 0.1s both;
     }
 
     #landing h1 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(32px, 5vw, 48px);
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 12px;
-      letter-spacing: -0.5px;
-      animation: fadeIn 0.6s ease-out;
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-size: clamp(34px, 6vw, 60px);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      animation: fadeIn 0.6s ease-out 0.15s both;
     }
 
     #landing .subtitle {
-      font-size: 17px;
-      color: var(--text-muted);
-      text-align: center;
-      max-width: 420px;
+      font-size: 18px;
+      color: rgb(255 255 255 / 0.70);
+      max-width: 440px;
       line-height: 1.6;
       margin-bottom: 48px;
-      font-weight: 300;
-      animation: fadeIn 0.6s ease-out 0.15s both;
+      animation: fadeIn 0.6s ease-out 0.25s both;
     }
 
     .lang-buttons {
       display: flex;
-      gap: 20px;
-      animation: fadeIn 0.6s ease-out 0.3s both;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeIn 0.6s ease-out 0.35s both;
     }
 
-    .lang-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 20px 48px;
-      font-size: 17px;
-      font-family: 'Source Sans 3', sans-serif;
-      font-weight: 500;
-      border-radius: 12px;
+    /* Pill buttons */
+    .btn {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 16px 40px;
+      border-radius: 999px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      letter-spacing: 0.5px;
+      border: 2px solid transparent;
+      transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
     }
-
-    .lang-btn:hover {
-      background: var(--surface-hover);
-      border-color: var(--accent);
-      box-shadow: 0 0 24px var(--accent-glow);
-      transform: translateY(-2px);
+    /* secondary = hot-pink, inverts to white on hover */
+    .btn-secondary {
+      background: var(--hot-pink);
+      color: var(--white);
+      border-color: var(--hot-pink);
+    }
+    .btn-secondary:hover {
+      background: var(--white);
+      color: var(--dark-blue);
+      border-color: var(--white);
+    }
+    /* outline (on dark) = white border, inverts to white fill */
+    .btn-outline-light {
+      background: transparent;
+      color: var(--white);
+      border-color: var(--white);
+    }
+    .btn-outline-light:hover {
+      background: var(--white);
+      color: var(--dark-blue);
     }
 
     #landing .footer-note {
       font-size: 13px;
-      color: var(--text-dim);
-      margin-top: 60px;
-      text-align: center;
+      color: rgb(255 255 255 / 0.50);
+      margin-top: 56px;
       animation: fadeIn 0.6s ease-out 0.5s both;
     }
 
-    /* ---- CHAT ---- */
+    /* ---- CHAT (light) ---- */
     #chat {
       display: none;
       flex-direction: column;
       height: 100vh;
+      background: var(--white);
     }
-
-    #chat.active {
-      display: flex;
-    }
+    #chat.active { display: flex; }
 
     .chat-header {
       padding: 16px 24px;
@@ -136,51 +191,41 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: var(--surface);
+      background: var(--white);
     }
 
     .chat-header .logo-area {
       display: flex;
       align-items: center;
       gap: 12px;
+      color: var(--dark-blue);
     }
-
-    .chat-header .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 8px var(--accent-glow);
-    }
+    .chat-header .mark .ncut { width: 13px; height: auto; color: var(--hot-pink); }
 
     .chat-header .title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 18px;
-      font-weight: 600;
+      font-family: var(--font-headline);
+      font-size: 17px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
     }
 
     .reset-btn {
       background: none;
       border: none;
-      color: var(--text-muted);
+      color: var(--fg-muted);
       cursor: pointer;
       font-size: 13px;
-      font-family: 'Source Sans 3', sans-serif;
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: all 0.2s;
+      font-family: var(--font-body);
+      padding: 6px 8px;
+      transition: color 160ms ease;
     }
-
-    .reset-btn:hover {
-      color: var(--accent);
-      background: var(--accent-soft);
-    }
+    .reset-btn:hover { color: var(--hot-pink); }
 
     .messages-area {
       flex: 1;
       overflow-y: auto;
-      padding: 24px 20px;
-      max-width: 680px;
+      padding: 28px 20px;
+      max-width: 720px;
       width: 100%;
       margin: 0 auto;
     }
@@ -190,59 +235,52 @@
       margin-bottom: 16px;
       animation: fadeIn 0.3s ease-out;
     }
-
     .message.user { justify-content: flex-end; }
     .message.assistant { justify-content: flex-start; }
 
     .message .bubble {
       max-width: 82%;
-      padding: 14px 18px;
-      font-size: 15px;
-      line-height: 1.65;
+      padding: 16px 20px;
+      font-size: 16px;
+      line-height: 1.6;
       white-space: pre-wrap;
+      color: var(--dark-blue);
     }
 
-    .message.user .bubble {
-      border-radius: 18px 18px 4px 18px;
-      background: var(--user-bubble);
-      border: 1px solid rgba(232, 168, 56, 0.15);
-    }
-
+    /* assistant = ice-blue card; user = powder-pink card. Both dark-blue text. */
     .message.assistant .bubble {
-      border-radius: 18px 18px 18px 4px;
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: var(--ice-blue);
+      border-radius: var(--radius-card) var(--radius-card) var(--radius-card) 6px;
+    }
+    .message.user .bubble {
+      background: var(--powder-pink);
+      border-radius: var(--radius-card) var(--radius-card) 6px var(--radius-card);
     }
 
-    .bubble strong {
-      color: var(--accent);
-      font-weight: 600;
-    }
+    .bubble strong { font-weight: 700; color: var(--dark-blue); }
 
     .typing {
       display: flex;
       gap: 6px;
-      padding: 12px 0;
+      padding: 14px 0;
       align-items: center;
     }
-
     .typing .dot {
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: var(--accent);
-      animation: pulse 1.4s ease-in-out infinite;
+      background: var(--hot-pink);
+      animation: pulseOpacity 1.4s ease-in-out infinite;
     }
-
     .typing .dot:nth-child(2) { animation-delay: 0.2s; }
     .typing .dot:nth-child(3) { animation-delay: 0.4s; }
 
     .error-msg {
-      padding: 10px 16px;
-      background: rgba(196, 84, 74, 0.1);
-      border: 1px solid var(--error);
-      border-radius: 10px;
-      color: var(--error);
+      padding: 12px 16px 12px 18px;
+      background: var(--powder-pink);
+      border-left: 3px solid var(--hot-pink);
+      border-radius: 8px;
+      color: var(--dark-blue);
       font-size: 14px;
       margin-bottom: 12px;
     }
@@ -250,11 +288,11 @@
     .input-area {
       padding: 16px 20px 24px;
       border-top: 1px solid var(--border);
-      background: var(--surface);
+      background: var(--white);
     }
 
     .input-row {
-      max-width: 680px;
+      max-width: 720px;
       margin: 0 auto;
       display: flex;
       gap: 12px;
@@ -263,66 +301,55 @@
 
     .input-row textarea {
       flex: 1;
-      background: var(--bg);
+      background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px 16px;
-      color: var(--text);
-      font-size: 15px;
-      font-family: 'Source Sans 3', sans-serif;
+      border-radius: 16px;
+      padding: 13px 16px;
+      color: var(--dark-blue);
+      font-size: 16px;
+      font-family: var(--font-body);
       line-height: 1.5;
       resize: none;
-      min-height: 42px;
-      max-height: 120px;
+      min-height: 46px;
+      max-height: 130px;
       overflow: auto;
-      transition: border-color 0.2s;
+      transition: border-color 160ms ease;
     }
-
-    .input-row textarea::placeholder {
-      color: var(--text-dim);
-    }
-
+    .input-row textarea::placeholder { color: var(--fg-subtle); }
     .input-row textarea:focus {
       outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 2px var(--accent-soft);
+      border-color: var(--hot-pink);
     }
 
+    /* send = circular pill, dark-blue, thin (1.5) arrow */
     .send-btn {
-      background: var(--accent);
+      background: var(--dark-blue);
       border: none;
-      color: var(--bg);
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
+      color: var(--white);
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      transition: background-color 160ms ease;
       flex-shrink: 0;
     }
-
-    .send-btn:hover:not(:disabled) {
-      transform: scale(1.05);
-      box-shadow: 0 0 16px var(--accent-glow);
-    }
-
-    .send-btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
+    .send-btn:hover:not(:disabled) { background: var(--hot-pink); }
+    .send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
     .input-footer {
       text-align: center;
       font-size: 12px;
-      color: var(--text-dim);
-      margin-top: 10px;
+      color: var(--fg-subtle);
+      margin-top: 12px;
     }
 
     @media (max-width: 480px) {
-      .lang-btn { padding: 16px 32px; font-size: 16px; }
-      .messages-area { padding: 16px 12px; }
+      .btn { padding: 15px 32px; font-size: 16px; }
+      .lang-buttons { flex-direction: column; width: 100%; max-width: 320px; }
+      .messages-area { padding: 18px 12px; }
       .message .bubble { max-width: 90%; }
     }
   </style>
@@ -331,24 +358,29 @@
 
 <!-- LANDING SCREEN -->
 <div id="landing">
-  <div class="bar"></div>
+  <div class="mark">
+    <svg class="ncut" viewBox="0 0 34.68 169.87" aria-hidden="true"><polygon points="0 169.87 34.68 169.87 0 0 0 169.87"></polygon></svg>
+  </div>
+  <p class="eyebrow">A 5-minute reflection</p>
   <h1>Mindset Unblocker</h1>
   <p class="subtitle">
     Discover the hidden belief holding you back.<br>
     Reframe it. Move forward.
   </p>
   <div class="lang-buttons">
-    <button class="lang-btn" onclick="startChat('en')">English</button>
-    <button class="lang-btn" onclick="startChat('fi')">Suomeksi</button>
+    <button class="btn btn-secondary" onclick="startChat('en')">English</button>
+    <button class="btn btn-outline-light" onclick="startChat('fi')">Suomeksi</button>
   </div>
-  <p class="footer-note">A 5-minute guided reflection · Powered by Lähtijät</p>
+  <p class="footer-note">Powered by Nordic Edge</p>
 </div>
 
 <!-- CHAT SCREEN -->
 <div id="chat">
   <div class="chat-header">
     <div class="logo-area">
-      <div class="dot"></div>
+      <span class="mark">
+        <svg class="ncut" viewBox="0 0 34.68 169.87" aria-hidden="true"><polygon points="0 169.87 34.68 169.87 0 0 0 169.87"></polygon></svg>
+      </span>
       <span class="title">Mindset Unblocker</span>
     </div>
     <button class="reset-btn" onclick="resetAll()">
@@ -366,13 +398,13 @@
         onkeydown="handleKey(event)"
       ></textarea>
       <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="22" y1="2" x2="11" y2="13"/>
-          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
         </svg>
       </button>
     </div>
-    <p class="input-footer" id="inputFooter">Powered by Lähtijät · Your responses are confidential</p>
+    <p class="input-footer" id="inputFooter">Powered by Nordic Edge · Your responses are confidential</p>
   </div>
 </div>
 
@@ -475,7 +507,7 @@ function getSystemPrompt() {
 
 function autoResize(el) {
   el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  el.style.height = Math.min(el.scrollHeight, 130) + 'px';
   document.getElementById('sendBtn').disabled = !el.value.trim() || isLoading;
 }
 
@@ -486,22 +518,13 @@ function handleKey(e) {
   }
 }
 
-function formatBold(text) {
-  return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-}
-
 function addMessage(role, content) {
   const area = document.getElementById('messagesArea');
   const div = document.createElement('div');
   div.className = `message ${role}`;
-  div.innerHTML = `<div class="bubble">${formatBold(content.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'))}</div>`;
-  // Re-process: the escaping messed up the bold. Let's do it properly:
-  const bubble = div.querySelector('.bubble');
-  // We need to handle this differently since we escaped HTML
-  div.innerHTML = '';
   const bubbleEl = document.createElement('div');
   bubbleEl.className = 'bubble';
-  // Split by ** for bold
+  // Split by ** for bold (avoids HTML injection — uses textContent)
   const parts = content.split('**');
   parts.forEach((part, i) => {
     if (i % 2 === 1) {
@@ -571,8 +594,8 @@ async function startChat(lang) {
   document.getElementById('resetLabel').textContent = lang === 'fi' ? 'Aloita alusta' : 'Start over';
   document.getElementById('userInput').placeholder = lang === 'fi' ? 'Kirjoita ajatuksesi tähän...' : 'Share your thoughts here...';
   document.getElementById('inputFooter').textContent = lang === 'fi'
-    ? 'Powered by Lähtijät · Vastauksesi ovat luottamuksellisia'
-    : 'Powered by Lähtijät · Your responses are confidential';
+    ? 'Powered by Nordic Edge · Vastauksesi ovat luottamuksellisia'
+    : 'Powered by Nordic Edge · Your responses are confidential';
 
   // Get initial message
   isLoading = true;
