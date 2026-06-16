@@ -1,6 +1,6 @@
 # Mindset Unblocker — Deployment Guide
 
-A 5-minute AI-powered reflection tool by Lähtijät.  
+A 5-minute AI-powered reflection tool by Nordic Edge.  
 Helps people identify and reframe limiting beliefs.
 
 ---
